@@ -13,7 +13,7 @@ fi
 
 # CONSTANT
 VERSION=2.2.12
-DIRECTORY=/usr/local/
+DIRECTORY=/usr/local
 
 #DIRS
 SCRIPT=$(readlink -f $0)
