@@ -28,8 +28,8 @@ case "$1" in
   start)
 	echo -n "Starting $DESC: "
 	touch $PIDFILE
-	chown deploy:deploy $PIDFILE
-	if start-stop-daemon --start --quiet --umask 007 --pidfile $PIDFILE --chuid deploy:deploy --exec $DAEMON -- $DAEMON_ARGS
+	chown redis:redis $PIDFILE
+	if start-stop-daemon --start --quiet --umask 007 --pidfile $PIDFILE --chuid redis:redis --exec $DAEMON -- $DAEMON_ARGS
 	then
 		echo "$NAME."
 	else
