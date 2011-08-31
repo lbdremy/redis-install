@@ -27,7 +27,7 @@ cd redis-$VERSION
 make
 
 # Move Redis installation to $DIRECTORY
-sudo mv -R /tmp/redis-$VERSION $DIRECTORY/redis
+sudo mv /tmp/redis-$VERSION $DIRECTORY/redis
 
 # Create Redis user/group
 sudo groupadd redis
