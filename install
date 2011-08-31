@@ -62,7 +62,7 @@ sudo cp $BASEDIR/init.d/redis-server /etc/init.d/redis-server
 # Set runlevel
 if which yum &> /dev/null; then
    chkconfig redis-server --add
-   chkconfig  redis-server  on --level 2,3,5
+   chkconfig redis-server --level 2,3,5 on 
 else
    update-rc.d redis-server defaults
 fi
