@@ -1,7 +1,7 @@
 #Install Redis
 
 ## Get Started
-    git clone 
+    git clone https://github.com/lbdremy/redis-install.git
     cd redis-install
     sudo ./install
     
