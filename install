@@ -53,17 +53,18 @@ else
    echo "Failed to install Redis"
 fi
 
-# Install init.d startup for redis-server
+# 
 cd $DIRECTORY/bin 
 ln -s $DIRECTORY/redis/src/redis-server redis-server
 ln -s $DIRECTORY/redis/src/redis-cli redis-cli
-sudo cp $BASEDIR/init.d/redis-server /etc/init.d/redis-server
 
-# Set runlevel
+# Set runlevel & Install init.d startup for redis-server
 if which yum &> /dev/null; then
+   sudo cp $BASEDIR/init.d/redhat/redis-server /etc/init.d/redis-server
    sudo chkconfig redis-server --add
    sudo chkconfig --level 235 redis-server on 
 else
+   sudo cp $BASEDIR/init.d/debian/redis-server /etc/init.d/redis-server
    sudo update-rc.d redis-server defaults
 fi
  
