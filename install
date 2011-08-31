@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Install dependencies depending of the distribution family
+echo "Download dependencies"
+
+if which yum &> /dev/null; then
+   echo "You are in the RedHat family"   
+   sudo yum install gcc-c++ make 
+else
+   echo "You are in the Debian family"
+   sudo apt-get install gcc make build-essential
+fi
+
+# CONSTANT
+VERSION=2.2.12
+DIRECTORY=/usr/local/
+
+#DIRS
+SCRIPT=$(readlink -f $0)
+BASEDIR=`dirname $SCRIPT`
+
+# Redis Installation
+cd /tmp
+wget http://redis.googlecode.com/files/redis-$VERSION.tar.gz
+tar xzf redis-$VERSION.tar.gz
+cd redis-$VERSION
+make
+
+# Move Redis installation to $DIRECTORY
+sudo mv -R /tmp/redis-$VERSION $DIRECTORY/redis
+
+# Create Redis user/group
+sudo groupadd redis
+sudo useradd -c "redis" -g redis -r -s /bin/bash redis
+
+# Permissions
+sudo chown -R redis:redis $DIRECTORY/redis
+
+# Modification of the configuration file for Redis
+cd $DIRECTORY/redis
+sudo mv redis.conf redis-default.conf
+sudo cp $BASEDIR/conf/redis.conf redis.conf 
+
+# Edit sysctl.conf to fix WARNING on Redis startup
+FIX_WARNING="vm.overcommit_memory = 1"
+sudo $FIX_WARNING >> /etc/sysctl.conf
+sudo sysctl vm.overcommit_memory=1
+
+# Test
+if which redis-server &> /dev/null; then
+   echo "Successfully installed Redis"
+else
+   echo "Failed to install Redis"
+fi
+
+# Install init.d startup for redis-server
+cd $DIRECTORY/bin 
+ln -s $DIRECTORY/redis/src/redis-server redis-server
+ln -s $DIRECTORY/redis/src/redis-cli redis-cli
+sudo cp $BASEDIR/init.d/redis-server /etc/init.d/redis-server
+
+# Set runlevel
+if which yum &> /dev/null; then
+   chkconfig redis-server --add
+   chkconfig  redis-server  on --level 2,3,5
+else
+   update-rc.d redis-server defaults
+fi
+ 
+# Start redis
+sudo redis-server start
+
+# Clean up
+sudo rm -R $BASEDIR
+sudo rm /tmp/redis-$VERSION.tar.gz
