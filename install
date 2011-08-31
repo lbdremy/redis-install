@@ -68,7 +68,7 @@ else
 fi
  
 # Start redis
-sudo redis-server start
+sudo /etc/init.d/redis-server start
 
 # Clean up
 sudo rm -R $BASEDIR
