@@ -43,7 +43,7 @@ sudo cp $BASEDIR/conf/redis.conf redis.conf
 
 # Edit sysctl.conf to fix WARNING on Redis startup
 FIX_WARNING="vm.overcommit_memory = 1"
-sudo $FIX_WARNING >> /etc/sysctl.conf
+sudo echo $FIX_WARNING >> /etc/sysctl.conf
 sudo sysctl vm.overcommit_memory=1
 
 # Test
